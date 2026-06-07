@@ -26,7 +26,8 @@ jobs:
           wget \
           imagemagick \
           sudo \
-          base-devel
+          base-devel \
+          python-pip
 
     - name: Create build user
       run: |
@@ -40,8 +41,24 @@ jobs:
     - name: Build ISO
       run: ./mkarchiso -v "."
 
-    - name: Upload ISO
+    - name: Upload ISO artifact
       uses: actions/upload-artifact@v4
       with:
         name: Antergos-NeXT-ISO
         path: out/
+
+    - name: Upload to Internet Archive
+      if: github.ref == 'refs/heads/master'
+      env:
+        IA_EMAIL: ${{ secrets.IA_EMAIL }}
+        IA_PASSWORD: ${{ secrets.IA_PASSWORD }}
+      run: |
+        pip install internetarchive
+        ia configure --email="$IA_EMAIL" --password="$IA_PASSWORD"
+        ISO=$(ls out/*.iso | head -1)
+        ia upload antergos-next "$ISO" \
+          --metadata="title:Antergos NeXT Live ISO" \
+          --metadata="creator:Antergos NeXT" \
+          --metadata="date:$(date +%Y-%m-%d)" \
+          --metadata="description:Antergos NeXT live installation ISO based on Arch Linux" \
+          --metadata="collection:opensource"
