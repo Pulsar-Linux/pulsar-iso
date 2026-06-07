@@ -10,6 +10,9 @@ wget -qN --show-progress -P "airootfs/root/" "https://raw.githubusercontent.com/
 wget -qN --show-progress -P "airootfs/root/" "https://raw.githubusercontent.com/Antergos/wallpapers/master/antergos-wallpaper.png"
 cp airootfs/root/antergos-wallpaper.png airootfs/root/livewall.png
 
+# Get Antergos icon for SDDM avatar
+wget -qN --show-progress -O "airootfs/root/liveuser.png" "https://avatars.githubusercontent.com/u/17977612"
+
 # Build liveuser skel
 cd "airootfs/root/antergos-skel-liveuser"
 makepkg -f

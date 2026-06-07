@@ -89,8 +89,10 @@ usermod -s /usr/bin/bash root
 
 echo "---> Create liveuser --->"
 useradd -m -p "" -g 'liveuser' -G 'sys,rfkill,wheel,uucp,nopasswdlogin,adm,tty' -s /bin/bash liveuser
-cp "/root/liveuser.png" "/var/lib/AccountsService/icons/liveuser"
-rm "/root/liveuser.png"
+if [[ -f "/root/liveuser.png" ]]; then
+  cp "/root/liveuser.png" "/var/lib/AccountsService/icons/liveuser"
+  rm "/root/liveuser.png"
+fi
 
 echo "---> Remove liveuser skel to clean for target skel --"
 pacman -Sy
@@ -107,12 +109,14 @@ echo "------------------" >> "/etc/motd"
 
 echo "---> Install locally built packages on ISO (place packages under airootfs/root/packages) --->"
 echo "--> content of /root/packages:"
-ls "/root/packages/"
+ls "/root/packages/" 2>&1 || echo "  (empty - no local packages)"
 echo "end of content of /root/packages. <---"
 
-pacman -Sy
-pacman -U --noconfirm --needed -- "/root/packages/"*".pkg.tar.zst"
-rm -rf "/root/packages/"
+if [[ -d "/root/packages/" ]]; then
+  pacman -Sy
+  pacman -U --noconfirm --needed -- "/root/packages/"*".pkg.tar.zst"
+  rm -rf "/root/packages/"
+fi
 
 echo "---> Enable systemd services in case needed --->"
 echo " --> per default now in airootfs/etc/systemd/system/multi-user.target.wants"
@@ -129,7 +133,9 @@ chmod 644 "/usr/share/antergos/backgrounds/"*".png"
 
 echo "---> Install Antergos icon --->"
 mkdir -p "/usr/share/antergos"
-cp "/root/liveuser.png" "/usr/share/antergos/antergos-icon.png"
+if [[ -f "/root/liveuser.png" ]]; then
+  cp "/root/liveuser.png" "/usr/share/antergos/antergos-icon.png"
+fi
 
 echo "---> install bash configs back into /etc/skel for offline install target --->"
 cp -af "/root/filebackups/"{".bashrc",".bash_profile"} "/etc/skel/"
