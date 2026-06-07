@@ -1,0 +1,38 @@
+name: Build ISO
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        pacman -Syu --noconfirm --needed \
+          archiso \
+          git \
+          squashfs-tools \
+          wget \
+          imagemagick
+
+    - name: Prepare
+      run: ./prepare.sh
+
+    - name: Build ISO
+      run: ./mkarchiso -v "."
+
+    - name: Upload ISO
+      uses: actions/upload-artifact@v4
+      with:
+        name: Antergos-NeXT-ISO
+        path: out/
