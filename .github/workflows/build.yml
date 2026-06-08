@@ -67,4 +67,4 @@ jobs:
           --metadata="subject:Antergos NeXT; Arch Linux; live ISO; Linux distribution" \
           --metadata="language:eng" \
           --metadata="mediatype:software" \
-          --metadata="collection:opensource"
+          --metadata="collection:software"
