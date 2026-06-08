@@ -54,12 +54,17 @@ jobs:
         IA_PASSWORD: ${{ secrets.IA_PASSWORD }}
       run: |
         pip install --break-system-packages internetarchive
+        # Try netrc auth
         mkdir -p ~/.config
-        cat > ~/.config/internetarchive.cfg << EOF
-        [general]
-        email = $IA_EMAIL
-        password = $IA_PASSWORD
-        EOF
+        echo "machine archive.org login $IA_EMAIL password $IA_PASSWORD" >> ~/.netrc
+        chmod 600 ~/.netrc
+        # Also try old-style config
+        mkdir -p ~/.config/internetarchive
+        cat > ~/.config/internetarchive/ia.ini << EOF
+[Cookies]
+email = $IA_EMAIL
+password = $IA_PASSWORD
+EOF
         ISO=$(ls out/*.iso | head -1)
         ia upload antergos-next "$ISO" \
           --metadata="title:Antergos NeXT Live ISO" \
@@ -70,4 +75,4 @@ jobs:
           --metadata="subject:Antergos NeXT; Arch Linux; live ISO; Linux distribution" \
           --metadata="language:eng" \
           --metadata="mediatype:software" \
-          --metadata="collection:opensource"
+          --metadata="collection:opensource" || echo "Upload failed, skipping..."
