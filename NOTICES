@@ -1,0 +1,37 @@
+# NOTICES
+
+## Trademark & Branding
+
+Antergos™ and associated logos, branding, and visual identity are 
+trademarks or registered trademarks of their respective owners.
+
+This project is a **community-driven revival** and is **not affiliated with**, 
+**not endorsed by**, and **not supported by** the original Antergos team 
+or any corporate entity.
+
+## Credits & Acknowledgments
+
+### Sources & Inspiration
+- [EndeavourOS-ISO](https://github.com/endeavouros-team/EndeavourOS-ISO) - Base build system
+- [Arch ISO](https://gitlab.archlinux.org/archlinux/archiso) - Original archiso
+- [Cnchi](https://github.com/Antergos/Cnchi) - The amazing installer
+- [Antergos Wallpapers](https://github.com/Antergos/wallpapers) - Beautiful art
+
+### Community Heroes
+Thanks to everyone who tested, provided feedback, and kept the Antergos 
+spirit alive throughout the years! 🖤
+
+This project exists because the community wanted it back.
+
+## License
+
+This project is licensed under GPLv3. See the LICENSE file for details.
+
+## Contributions
+
+Contributions are welcome! By submitting pull requests, you agree to license 
+your work under the same GPLv3 license.
+
+---
+
+*Made with ❤️ by the community, for the community.*
