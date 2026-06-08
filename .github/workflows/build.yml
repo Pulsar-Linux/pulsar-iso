@@ -55,7 +55,7 @@ jobs:
       run: |
         pip install --break-system-packages internetarchive
         mkdir -p ~/.config/internetarchive
-        printf '[general]\naccess_key = %s\nsecret_key = %s\n' "$IA_ACCESS_KEY" "$IA_SECRET_KEY" > ~/.config/internetarchive/ia.ini
+        printf '[s3]\naccess = %s\nsecret = %s\n' "$IA_ACCESS_KEY" "$IA_SECRET_KEY" > ~/.config/internetarchive/ia.ini
         chmod 600 ~/.config/internetarchive/ia.ini
         ISO=$(ls out/*.iso | head -1)
         ia upload antergos-next "$ISO" \
