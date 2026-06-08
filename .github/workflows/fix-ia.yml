@@ -13,4 +13,6 @@ jobs:
           mkdir -p ~/.config/internetarchive
           printf '[s3]\naccess = %s\nsecret = %s\n' "$IA_ACCESS_KEY" "$IA_SECRET_KEY" > ~/.config/internetarchive/ia.ini
           chmod 600 ~/.config/internetarchive/ia.ini
-          ia metadata antergos-next --modify="collection:opensource" --modify="collection:linux_distributions" --modify="mediatype:software"
+          ia metadata antergos-next --modify="mediatype:software"
+          # Also try adding to collection - may fail if not authorized
+          ia metadata antergos-next --modify="collection:opensource" || echo "opensource collection not authorized via API"
