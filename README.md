@@ -28,7 +28,9 @@ Provides a live KDE Plasma environment to install Arch Linux using **Cnchi**, th
 
 ## Download
 
-ISO images exceed GitHub's 2 GB release limit. Build from source (see below) or check the project [Discussions](https://github.com/Antergos-NeXT/Antergos-NeXT-ISO/discussions) for alternative download mirrors.
+ISO images exceed GitHub's 2 GB release limit. They are uploaded to [Internet Archive](https://archive.org/details/antergos-next).
+
+**⚠️ Early releases may have incomplete DE package lists.** The latest `packages.xml` is always in the [Cnchi repo](https://github.com/Antergos-NeXT/Cnchi/blob/0.16.x/data/packages.xml). Building from source after a fresh clone ensures you have the most up-to-date package selection.
 
 ## How to build
 
