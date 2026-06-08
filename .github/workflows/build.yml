@@ -53,7 +53,7 @@ jobs:
         IA_EMAIL: ${{ secrets.IA_EMAIL }}
         IA_PASSWORD: ${{ secrets.IA_PASSWORD }}
       run: |
-        pip install --break-system-packages internetarchive
+        pip install --break-system-packages "internetarchive<1.0.0"
         # Try netrc auth
         mkdir -p ~/.config
         printf 'machine archive.org\nlogin %s\npassword %s\n' "$IA_EMAIL" "$IA_PASSWORD" > ~/.netrc
