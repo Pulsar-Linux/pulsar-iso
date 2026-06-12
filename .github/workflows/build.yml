@@ -27,7 +27,9 @@ jobs:
           imagemagick \
           sudo \
           base-devel \
-          python-pip
+          python-pip \
+          rsync \
+          openssh
 
     - name: Create build user
       run: |
