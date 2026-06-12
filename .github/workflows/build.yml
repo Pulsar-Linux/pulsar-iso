@@ -60,14 +60,6 @@ jobs:
         ssh-keyscan -t rsa,ed25519 frs.sourceforge.net >> ~/.ssh/known_hosts 2>/dev/null || true
         chmod 644 ~/.ssh/known_hosts
 
-        # Configure SSH to accept new hosts
-        cat >> ~/.ssh/config << 'EOF'
-Host frs.sourceforge.net
-    StrictHostKeyChecking accept-new
-    UserKnownHostsFile ~/.ssh/known_hosts
-EOF
-        chmod 600 ~/.ssh/config
-
         # Find ISO
         ISO=$(ls out/*.iso | head -1)
         DATE=$(date +%Y.%m.%d)
@@ -120,6 +112,6 @@ EOF
           echo "- Cnchi: https://github.com/Antergos-NeXT/Cnchi" >> README.md
 
           # Upload ISO + README
-          rsync -avP "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
+          rsync -avP -e "ssh -o StrictHostKeyChecking=no" "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
           echo "Uploaded to ${REMOTE_DIR}"
         fi
