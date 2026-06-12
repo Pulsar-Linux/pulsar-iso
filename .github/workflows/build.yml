@@ -47,24 +47,14 @@ jobs:
         name: Antergos-NeXT-ISO
         path: out/
 
-    - name: Upload to Internet Archive
+    - name: Upload to SourceForge
       if: github.ref == 'refs/heads/master'
       env:
-        IA_ACCESS_KEY: ${{ secrets.IA_ACCESS_KEY }}
-        IA_SECRET_KEY: ${{ secrets.IA_SECRET_KEY }}
+        SF_SSH_KEY: ${{ secrets.SF_SSH_KEY }}
       run: |
-        pip install --break-system-packages internetarchive
-        mkdir -p ~/.config/internetarchive
-        printf '[s3]\naccess = %s\nsecret = %s\n' "$IA_ACCESS_KEY" "$IA_SECRET_KEY" > ~/.config/internetarchive/ia.ini
-        chmod 600 ~/.config/internetarchive/ia.ini
+        mkdir -p ~/.ssh
+        printf '%s' "$SF_SSH_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan frs.sourceforge.net >> ~/.ssh/known_hosts 2>/dev/null
         ISO=$(ls out/*.iso | head -1)
-        ia upload antergos-next "$ISO" \
-          --metadata="title:Antergos NeXT Live ISO" \
-          --metadata="creator:Antergos NeXT" \
-          --metadata="date:$(date +%Y-%m-%d)" \
-          --metadata="year:$(date +%Y)" \
-          --metadata="description:Antergos NeXT live installation ISO based on Arch Linux. Note: early releases may have incomplete DE package lists; check https://github.com/Antergos-NeXT/Cnchi/issues for known issues." \
-          --metadata="subject:Antergos NeXT; Arch Linux; live ISO; Linux distribution" \
-          --metadata="language:eng" \
-          --metadata="mediatype:software" \
-          --metadata="collection:software"
+        rsync -avP "$ISO" "antergos-txen@frs.sourceforge.net:/home/frs/project/antergos-next/"

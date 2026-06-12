@@ -1,0 +1,11 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Category": "",
+        "Description": "Antergos Dark",
+        "Id": "com.antergos.breezedark.desktop",
+        "License": "GPLv2+",
+        "Name": "Antergos Dark",
+        "Website": "https://www.kde.org"
+    }
+}

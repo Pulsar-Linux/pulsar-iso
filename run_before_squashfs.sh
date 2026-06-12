@@ -139,9 +139,10 @@ mv "/root/antergos-wallpaper.png" "/usr/share/antergos/backgrounds/antergos-wall
 mv "/root/livewall.png" "/usr/share/antergos/backgrounds/antergos-wallpaper-live.png"
 chmod 644 "/usr/share/antergos/backgrounds/"*".png"
 
-echo "---> Register wallpaper for Plasma --->"
-mkdir -p "/usr/share/wallpapers/Antergos/contents/images"
-cp "/usr/share/antergos/backgrounds/antergos-wallpaper-live.png" "/usr/share/wallpapers/Antergos/contents/images/1920x1080.png"
+echo "---> Register wallpaper for Plasma (overwrite default KDE Next/ wallpaper) --->"
+for res in 1920x1080 3840x2160 1440x2960 5120x2880 7680x2160; do
+  cp "/usr/share/antergos/backgrounds/antergos-wallpaper-live.png" "/usr/share/wallpapers/Next/contents/images/${res}.png"
+done
 
 echo "---> Install Antergos icon --->"
 mkdir -p "/usr/share/antergos"
@@ -176,6 +177,9 @@ rm "/var/log/pacman.log"
 rm -rf "/var/cache/pacman/pkg/"
 echo "---> remove ranked mirrorlist, used for fetching offline packages replacing it with original from package --->"
 mv "/etc/pacman.d/mirrorlist-from-package" "/etc/pacman.d/mirrorlist"
+
+echo "---> Fix cnchi desktop file to use pkexec --->"
+sed -i 's|^Exec=cnchi$|Exec=pkexec cnchi|' "/usr/share/applications/cnchi.desktop"
 
 echo "---> Set Antergos NeXT os-release --->"
 cat > "/usr/lib/os-release" << 'OSEOF'

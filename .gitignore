@@ -1,8 +1,2 @@
-work/
-out/
-airootfs/root/antergos-skel-liveuser/*.pkg.tar.zst
-airootfs/root/antergos-skel-liveuser/pkg/
-airootfs/root/packages/
-airootfs/root/livewall-original.png
-airootfs/etc/pacman.d/
-*.log
+Cnchi/
+antergos-pkgs/
