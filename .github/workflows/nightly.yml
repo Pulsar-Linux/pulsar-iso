@@ -53,11 +53,11 @@ jobs:
       env:
         SF_SSH_KEY: ${{ secrets.SF_SSH_KEY }}
       run: |
-        mkdir -p ~/.ssh
-        echo "$SF_SSH_KEY" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan -t rsa,ed25519 frs.sourceforge.net >> ~/.ssh/known_hosts 2>/dev/null || true
-        chmod 644 ~/.ssh/known_hosts
+        mkdir -p /root/.ssh
+        echo "$SF_SSH_KEY" > /root/.ssh/id_ed25519
+        chmod 600 /root/.ssh/id_ed25519
+        ssh-keyscan -t rsa,ed25519 frs.sourceforge.net >> /root/.ssh/known_hosts 2>/dev/null || true
+        chmod 644 /root/.ssh/known_hosts
 
         # Find ISO
         ISO=$(ls out/*-nightly*.iso | head -1)
