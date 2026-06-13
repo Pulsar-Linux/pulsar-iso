@@ -63,7 +63,7 @@ jobs:
         # Find ISO
         ISO=$(ls out/*.iso | head -1)
         DATE=$(date +%Y.%m.%d)
-        REMOTE_DIR="/home/frs/project/pulsar/${DATE}"
+        REMOTE_DIR="/home/frs/project/pulsar-linux/${DATE}"
 
         # Validate ISO exists
         if [[ -z "$ISO" || ! -f "$ISO" ]]; then
@@ -73,7 +73,7 @@ jobs:
 
         # Debug SSH
         echo "Testing SSH key..."
-        ssh -i /root/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=no antergos-txen@frs.sourceforge.net "echo SSH_OK" 2>&1 || echo "SSH_TEST_FAILED"
+        ssh -i /root/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=no pulsar-dev@frs.sourceforge.net "echo SSH_OK" 2>&1 || echo "SSH_TEST_FAILED"
 
         # Check ISO size (must be > 500MB)
         SIZE=$(stat -c%s "$ISO")
@@ -89,8 +89,8 @@ jobs:
 
         # Check if ISO already exists and auto-increment release number
         RELEASE=1
-        if ssh antergos-txen@frs.sourceforge.net ls "${REMOTE_DIR}/"*.iso &>/dev/null; then
-          EXISTING=$(ssh antergos-txen@frs.sourceforge.net ls "${REMOTE_DIR}/"*.iso 2>/dev/null)
+        if ssh pulsar-dev@frs.sourceforge.net ls "${REMOTE_DIR}/"*.iso &>/dev/null; then
+          EXISTING=$(ssh pulsar-dev@frs.sourceforge.net ls "${REMOTE_DIR}/"*.iso 2>/dev/null)
           for f in $EXISTING; do
             if echo "$f" | grep -q "release-"; then
               N=$(echo "$f" | sed 's/.*release-\([0-9]*\)\.iso/\1/')
@@ -133,5 +133,5 @@ jobs:
         echo "- Cnchi: https://github.com/Pulsar-Linux/cnchi" >> README.md
 
         # Upload ISO + README
-        rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
+        rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" "$ISO" README.md "pulsar-dev@frs.sourceforge.net:${REMOTE_DIR}/"
         echo "Uploaded ${ISO} to ${REMOTE_DIR}"

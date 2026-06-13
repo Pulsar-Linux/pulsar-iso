@@ -61,7 +61,7 @@ jobs:
 
         # Find ISO
         ISO=$(ls out/*-nightly*.iso | head -1)
-        REMOTE_DIR="/home/frs/project/pulsar/nightly"
+        REMOTE_DIR="/home/frs/project/pulsar-linux/nightly"
 
         # Validate ISO exists
         if [[ -z "$ISO" || ! -f "$ISO" ]]; then
@@ -130,5 +130,5 @@ jobs:
         echo "- Cnchi: https://github.com/Pulsar-Linux/cnchi" >> README.md
 
         # Upload to nightly folder (overwrite allowed)
-        rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no" --delete "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
+        rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no" --delete "$ISO" README.md "pulsar-dev@frs.sourceforge.net:${REMOTE_DIR}/"
         echo "Uploaded nightly to ${REMOTE_DIR}"
