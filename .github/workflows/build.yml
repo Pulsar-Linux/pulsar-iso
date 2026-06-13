@@ -71,6 +71,10 @@ jobs:
           exit 1
         fi
 
+        # Debug SSH
+        echo "Testing SSH key..."
+        ssh -i /root/.ssh/id_ed25519 -o BatchMode=yes -o StrictHostKeyChecking=no antergos-txen@frs.sourceforge.net "echo SSH_OK" 2>&1 || echo "SSH_TEST_FAILED"
+
         # Check ISO size (must be > 500MB)
         SIZE=$(stat -c%s "$ISO")
         if [[ $SIZE -lt 524288000 ]]; then
@@ -112,6 +116,6 @@ jobs:
           echo "- Cnchi: https://github.com/Antergos-NeXT/Cnchi" >> README.md
 
           # Upload ISO + README
-          rsync -avP -e "ssh -o StrictHostKeyChecking=no" "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
+          rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" "$ISO" README.md "antergos-txen@frs.sourceforge.net:${REMOTE_DIR}/"
           echo "Uploaded to ${REMOTE_DIR}"
         fi
