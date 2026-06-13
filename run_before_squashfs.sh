@@ -182,8 +182,7 @@ echo "---> Fix cnchi desktop file to use sudo (pkexec strips env in live ISO) --
 sed -i 's|^Exec=pkexec cnchi$|Exec=sudo -E cnchi|' "/usr/share/applications/cnchi.desktop"
 sed -i 's|^Exec=cnchi$|Exec=sudo -E cnchi|' "/usr/share/applications/cnchi.desktop"
 
-echo "---> Fix cnchi regain_privileges bug (false return before seteuid) --->"
-sed -i '/^        if os.geteuid() != 0:$/,/^        os\.setgroups(\[\])$/c\        if os.geteuid() != 0:\n            os.seteuid(0)\n            os.setegid(0)\n            os.setgroups([])' "/usr/share/cnchi/misc/extra.py"
+echo "---> Cnchi regain_privileges fix already applied upstream (commit 524bcc82) --->"
 
 echo "---> Set Antergos NeXT os-release --->"
 cat > "/usr/lib/os-release" << 'OSEOF'
