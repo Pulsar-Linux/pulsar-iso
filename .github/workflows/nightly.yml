@@ -61,7 +61,7 @@ jobs:
 
         # Find ISO
         ISO=$(ls out/*-nightly*.iso | head -1)
-        REMOTE_DIR="/home/frs/project/pulsar-linux/nightly"
+        REMOTE_DIR="/home/frs/project/pulsar-linux/Pulsar ISO's/nightly"
 
         # Validate ISO exists
         if [[ -z "$ISO" || ! -f "$ISO" ]]; then
@@ -83,7 +83,7 @@ jobs:
 
         # Create README
         DATE=$(date +%Y.%m.%d)
-        echo "# ⚠️ Pulsar Nightly ISO" > README.md
+        echo "# ⚠️ Pulsar Linux Nightly ISO" > README.md
         echo "" >> README.md
         echo "## ⚠️ WARNING - NOT FOR PRODUCTION USE" >> README.md
         echo "" >> README.md
@@ -119,6 +119,9 @@ jobs:
         echo "- **Type**: nightly build" >> README.md
         echo "- **Status**: UNTESTED" >> README.md
         echo "" >> README.md
+        echo "### Folder" >> README.md
+        echo "This ISO is hosted under /Pulsar ISO's/nightly/ on the pulsar-linux SourceForge project." >> README.md
+        echo "" >> README.md
         echo "## Installation (at your own risk!)" >> README.md
         echo "1. Boot from ISO" >> README.md
         echo "2. Select desktop environment" >> README.md
@@ -128,6 +131,7 @@ jobs:
         echo "## Source" >> README.md
         echo "- ISO Build: https://github.com/Pulsar-Linux/pulsar-iso" >> README.md
         echo "- Cnchi: https://github.com/Pulsar-Linux/cnchi" >> README.md
+        echo "- Packages: https://github.com/Pulsar-Linux/pulsar-pkgs" >> README.md
 
         # Upload to nightly folder (overwrite allowed)
         rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o StrictHostKeyChecking=no" --delete "$ISO" README.md "pulsar-dev@frs.sourceforge.net:${REMOTE_DIR}/"

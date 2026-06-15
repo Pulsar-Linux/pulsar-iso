@@ -63,7 +63,7 @@ jobs:
         # Find ISO
         ISO=$(ls out/*.iso | head -1)
         DATE=$(date +%Y.%m.%d)
-        REMOTE_DIR="/home/frs/project/pulsar-linux/${DATE}"
+        REMOTE_DIR="/home/frs/project/pulsar-linux/Pulsar ISO's/${DATE}"
 
         # Validate ISO exists
         if [[ -z "$ISO" || ! -f "$ISO" ]]; then
@@ -109,7 +109,7 @@ jobs:
         ISO="$NEW_ISO"
 
         # Create README
-        echo "# Pulsar Live ISO" > README.md
+        echo "# Pulsar Linux ISO" > README.md
         echo "" >> README.md
         echo "## Build Info" >> README.md
         echo "- **Date**: ${DATE}" >> README.md
@@ -117,8 +117,10 @@ jobs:
         echo "- **Architecture**: x86_64" >> README.md
         echo "" >> README.md
         echo "## Desktop Environments" >> README.md
-        echo "- KDE Plasma (default)" >> README.md
-        echo "- GNOME, XFCE, Cinnamon, and more..." >> README.md
+        echo "- KDE Plasma (default), GNOME, XFCE, Cinnamon, and more..." >> README.md
+        echo "" >> README.md
+        echo "## Folder" >> README.md
+        echo "This ISO is hosted under /Pulsar ISO's/ on the pulsar-linux SourceForge project." >> README.md
         echo "" >> README.md
         echo "## Installation" >> README.md
         echo "1. Boot from ISO" >> README.md
@@ -131,6 +133,7 @@ jobs:
         echo "## Source" >> README.md
         echo "- ISO Build: https://github.com/Pulsar-Linux/pulsar-iso" >> README.md
         echo "- Cnchi: https://github.com/Pulsar-Linux/cnchi" >> README.md
+        echo "- Packages: https://github.com/Pulsar-Linux/pulsar-pkgs" >> README.md
 
         # Upload ISO + README
         rsync -avP -e "ssh -i /root/.ssh/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=no" "$ISO" README.md "pulsar-dev@frs.sourceforge.net:${REMOTE_DIR}/"
