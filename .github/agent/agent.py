@@ -119,7 +119,7 @@ def load_llm():
     print("[agent] loading model...")
     llm = Llama(
         model_path=MODEL_PATH,
-        n_ctx=4096,
+        n_ctx=32768,
         n_threads=4,
         n_gpu_layers=0,
         verbose=False,
