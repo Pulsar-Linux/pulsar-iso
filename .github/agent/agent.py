@@ -9,7 +9,7 @@ import os
 import json
 import subprocess
 import glob
-from datetime import datetime
+from datetime import datetime, timezone
 
 from rich.console import Console
 from rich.panel import Panel
@@ -187,7 +187,7 @@ def ask_llm(llm, messages: list) -> dict:
     )
     return response["choices"][0]["message"]
 
-def review_file(llm, rel_path: str, progress_desc: str):
+def review_file(llm, rel_path: str):
     global tool_calls_made
     messages = [
         {"role": "system", "content": SYS_MSG},
@@ -274,7 +274,7 @@ def print_header():
     console.print(Panel(
         "[bold cyan]PULSAR LINUX MICROAGENT[/bold cyan]\n"
         "[dim]SLM-powered code reviewer • Qwen2.5-1.5B • DuckDuckGo search[/dim]",
-        subtitle=datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC"),
+        subtitle=datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
         box=box.DOUBLE,
     ))
 
@@ -321,13 +321,29 @@ def main():
 
     targets = sorted(set(
         t.strip() for t in (
-            list_files("packages/*/PKGBUILD").split("\n")
-            + list_files("*.sh").split("\n")
-            + list_files("airootfs/**/*.sh").split("\n")
-            + list_files("*.conf").split("\n")
-            + list_files("profiledef.sh").split("\n")
+            list_files("**/*.sh").split("\n")
+            + list_files("**/*.py").split("\n")
+            + list_files("**/*.conf").split("\n")
+            + list_files("**/PKGBUILD").split("\n")
+            + list_files("**/*.desktop").split("\n")
+            + list_files("**/*.service").split("\n")
+            + list_files("*.yaml").split("\n")
+            + list_files("*.yml").split("\n")
+            + list_files("packages/**/*").split("\n")
         ) if t.strip()
-    ))
+    )
+    # Filter out binary/media/large files by extension
+    skip_exts = {".zst", ".tar.gz", ".tar", ".gz", ".svg", ".png", ".jpg",
+                 ".jpeg", ".gif", ".ico", ".woff", ".woff2", ".ttf", ".eot",
+                 ".opus", ".ogg", ".mp3", ".wav", ".iso", ".sig"}
+    targets = [t for t in targets
+               if not any(t.endswith(e) for e in skip_exts)
+               and not t.startswith(".git")
+               and os.path.isfile(os.path.join(REPO_PATH, t))]
+
+    # Skip if file is too large (>100KB)
+    targets = [t for t in targets
+               if os.path.getsize(os.path.join(REPO_PATH, t)) <= 102400]
 
     console.print(f"\n  [dim]found {len(targets)} files to review[/dim]")
 
