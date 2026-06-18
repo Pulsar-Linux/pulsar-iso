@@ -26,7 +26,7 @@ console = Console()
 
 MODEL_URL = os.environ.get(
     "MODEL_URL",
-    "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+    "https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF/resolve/main/qwen2.5-7b-instruct-q4_k_m.gguf"
 )
 MODEL_PATH = os.environ.get("MODEL_PATH", "/tmp/model.gguf")
 REPO_PATH = "/__w/pulsar-iso/pulsar-iso"
@@ -39,10 +39,18 @@ def tool(fn):
     tools.append(fn)
     return fn
 
+def _resolve(path: str) -> str:
+    # Strip hallucinated prefixes like /path/to/
+    clean = path.lstrip("/")
+    for prefix in ["path/to/", "repo/", "root/"]:
+        if clean.startswith(prefix):
+            clean = clean[len(prefix):]
+    return os.path.join(REPO_PATH, clean)
+
 @tool
 def read_file(path: str) -> str:
     """Read a file from the repository."""
-    full = os.path.join(REPO_PATH, path.lstrip("/"))
+    full = _resolve(path)
     if not os.path.exists(full):
         return f"ERROR: file not found: {full}"
     with open(full) as f:
@@ -50,16 +58,20 @@ def read_file(path: str) -> str:
 
 @tool
 def edit_file(path: str, old_string: str, new_string: str) -> str:
-    """Edit a file by replacing old_string with new_string."""
+    """Edit a file by replacing old_string with new_string. If old_string is empty, appends new_string to end."""
     global files_fixed
-    full = os.path.join(REPO_PATH, path.lstrip("/"))
+    full = _resolve(path)
     if not os.path.exists(full):
         return f"ERROR: file not found: {full}"
     with open(full) as f:
         content = f.read()
-    if old_string not in content:
+    if not old_string:
+        # Append mode — model wants to add content
+        content += "\n" + new_string + "\n"
+    elif old_string not in content:
         return f"ERROR: old_string not found in {path}"
-    content = content.replace(old_string, new_string, 1)
+    else:
+        content = content.replace(old_string, new_string, 1)
     with open(full, "w") as f:
         f.write(content)
     files_fixed += 1
@@ -235,7 +247,11 @@ def review_file(llm, rel_path: str):
         if "tool_calls" in msg and msg["tool_calls"]:
             for tc in msg["tool_calls"]:
                 name = tc["function"]["name"]
-                args = json.loads(tc["function"]["arguments"])
+                try:
+                    args = json.loads(tc["function"]["arguments"])
+                except json.JSONDecodeError:
+                    err(f"malformed JSON args from {name}, skipping")
+                    continue
                 fn = TOOL_MAP.get(name)
                 if fn:
                     tool_calls_made += 1
