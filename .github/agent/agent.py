@@ -334,7 +334,7 @@ def main():
             + list_files("*.yml").split("\n")
             + list_files("packages/**/*").split("\n")
         ) if t.strip()
-    )
+    ))
     # Filter out binary/media/large files by extension
     skip_exts = {".zst", ".tar.gz", ".tar", ".gz", ".svg", ".png", ".jpg",
                  ".jpeg", ".gif", ".ico", ".woff", ".woff2", ".ttf", ".eot",
