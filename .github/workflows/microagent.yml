@@ -1,0 +1,40 @@
+name: microagent
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  agent:
+    runs-on: ubuntu-latest
+    container: archlinux:latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install deps
+      run: |
+        pacman -Syu --noconfirm --needed \
+          python python-pip wget git base-devel
+        pip install --break-system-packages \
+          llama-cpp-python \
+          duckduckgo_search
+
+    - name: Download SLM model
+      run: |
+        wget -q --show-progress \
+          -O /tmp/model.gguf \
+          "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf"
+
+    - name: Configure git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: Run agent
+      run: python .github/agent/agent.py
+      env:
+        MODEL_PATH: /tmp/model.gguf
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
