@@ -20,7 +20,8 @@ jobs:
           python python-pip wget git base-devel
         pip install --break-system-packages \
           llama-cpp-python \
-          duckduckgo_search
+          duckduckgo_search \
+          rich
 
     - name: Download SLM model
       run: |
