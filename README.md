@@ -1,4 +1,21 @@
-# Pulsar ISO
+# Pulsar Linux — Discontinued
+
+Pulsar Linux was the early development codename for what later became
+**Antergos NeXT**.
+
+This project is **no longer maintained** for several reasons:
+
+1. I do not have the time or resources to continue updating Pulsar.
+2. Pulsar relied on **Cnchi**, which I no longer maintain.
+3. Pulsar was never intended to be a fully separate, long-term distro.
+   It served only as an experimental phase before Antergos NeXT.
+
+Because of this, Pulsar Linux should **not** be considered an active
+Linux distribution. It is effectively a **graveyard repository** kept
+online only for archival and historical purposes.
+
+If anyone intends to list Pulsar Linux (yes, SudoStation, this means you),
+please do not. This project is discontinued.
 
 [![Build ISO](https://github.com/Pulsar-Linux/pulsar-iso/actions/workflows/build.yml/badge.svg)](https://github.com/Pulsar-Linux/pulsar-iso/actions/workflows/build.yml)
 [![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)](LICENSE)
